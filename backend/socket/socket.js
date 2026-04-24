@@ -5,10 +5,9 @@ import express from "express";
 const app = express();
 
 const server = http.createServer(app);
-
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://realtime-chat-frontend-uqbj.onrender.com"
+  "https://real-time-frontend-app.onrender.com"
 ];
 
 const io = new Server(server, {

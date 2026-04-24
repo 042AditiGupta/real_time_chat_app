@@ -19,7 +19,7 @@ app.use(cookieParser());
 const corsOption = {
   origin: [
     "http://localhost:3000",
-    "https://real-time-chat-app-frontend-7wge.onrender.com"
+    "https://real-time-frontend-app.onrender.com"
   ],
   credentials: true
 };
