@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -22,7 +22,6 @@ const Signup = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
-    // Frontend Validation
     if (
       !user.fullName ||
       !user.username ||
@@ -39,7 +38,7 @@ const Signup = () => {
 
     try {
       const res = await axios.post(
-         `${BASE_URL}/api/v1/user/register`,
+        `${BASE_URL}/api/v1/user/register`,
         user,
         {
           headers: {
@@ -52,7 +51,6 @@ const Signup = () => {
       if (res.data.success) {
         toast.success(res.data.message || "Registered Successfully!");
 
-        // Clear form
         setUser({
           fullName: "",
           username: "",
@@ -61,7 +59,6 @@ const Signup = () => {
           gender: "",
         });
 
-        // Redirect after 1 sec
         setTimeout(() => {
           navigate("/login");
         }, 1000);
@@ -71,16 +68,16 @@ const Signup = () => {
 
       toast.error(
         error.response?.data?.message ||
-          "Signup failed. Try again."
+        "Signup failed. Try again."
       );
     }
   };
 
   return (
     <div className="w-full max-w-sm sm:max-w-md mx-auto px-4 sm:px-0">
-      <div className="w-full p-4 sm:p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border border-gray-100">
+      <div className="w-full p-4 sm:p-6 rounded-2xl shadow-xl bg-white/20 dark:bg-white/10 backdrop-blur-md border border-white/30">
 
-        <h1 className="text-2xl sm:text-3xl font-bold text-center">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center text-black dark:text-white">
           Signup
         </h1>
 
@@ -88,7 +85,7 @@ const Signup = () => {
 
           <div>
             <label className="label p-2">
-              <span className="text-sm sm:text-base label-text">
+              <span className="text-sm sm:text-base text-black dark:text-white font-medium">
                 Full Name
               </span>
             </label>
@@ -98,7 +95,7 @@ const Signup = () => {
               onChange={(e) =>
                 setUser({ ...user, fullName: e.target.value })
               }
-              className="w-full input input-bordered h-10 text-sm sm:text-base"
+              className="w-full input input-bordered h-10 text-sm sm:text-base bg-white text-black"
               type="text"
               placeholder="Full Name"
             />
@@ -106,7 +103,7 @@ const Signup = () => {
 
           <div>
             <label className="label p-2">
-              <span className="text-sm sm:text-base label-text">
+              <span className="text-sm sm:text-base text-black dark:text-white font-medium">
                 Username
               </span>
             </label>
@@ -116,7 +113,7 @@ const Signup = () => {
               onChange={(e) =>
                 setUser({ ...user, username: e.target.value })
               }
-              className="w-full input input-bordered h-10 text-sm sm:text-base"
+              className="w-full input input-bordered h-10 text-sm sm:text-base bg-white text-black"
               type="text"
               placeholder="Username"
             />
@@ -124,7 +121,7 @@ const Signup = () => {
 
           <div>
             <label className="label p-2">
-              <span className="text-sm sm:text-base label-text">
+              <span className="text-sm sm:text-base text-black dark:text-white font-medium">
                 Password
               </span>
             </label>
@@ -134,7 +131,7 @@ const Signup = () => {
               onChange={(e) =>
                 setUser({ ...user, password: e.target.value })
               }
-              className="w-full input input-bordered h-10 text-sm sm:text-base"
+              className="w-full input input-bordered h-10 text-sm sm:text-base bg-white text-black"
               type="password"
               placeholder="Password"
             />
@@ -142,7 +139,7 @@ const Signup = () => {
 
           <div>
             <label className="label p-2">
-              <span className="text-sm sm:text-base label-text">
+              <span className="text-sm sm:text-base text-black dark:text-white font-medium">
                 Confirm Password
               </span>
             </label>
@@ -152,7 +149,7 @@ const Signup = () => {
               onChange={(e) =>
                 setUser({ ...user, confirmPassword: e.target.value })
               }
-              className="w-full input input-bordered h-10 text-sm sm:text-base"
+              className="w-full input input-bordered h-10 text-sm sm:text-base bg-white text-black"
               type="password"
               placeholder="Confirm Password"
             />
@@ -161,7 +158,9 @@ const Signup = () => {
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 my-4">
 
             <div className="flex items-center">
-              <p className="text-sm sm:text-base">male</p>
+              <p className="text-sm sm:text-base text-black dark:text-white">
+                Male
+              </p>
 
               <input
                 type="checkbox"
@@ -172,7 +171,9 @@ const Signup = () => {
             </div>
 
             <div className="flex items-center">
-              <p className="text-sm sm:text-base">female</p>
+              <p className="text-sm sm:text-base text-black dark:text-white">
+                Female
+              </p>
 
               <input
                 type="checkbox"
@@ -184,9 +185,9 @@ const Signup = () => {
 
           </div>
 
-          <p className="text-center my-2 text-sm sm:text-base">
+          <p className="text-center my-2 text-sm sm:text-base text-black dark:text-white">
             Already have an account?{" "}
-            <Link to="/login" className="text-blue-400">
+            <Link to="/login" className="text-blue-500 font-semibold">
               Login
             </Link>
           </p>

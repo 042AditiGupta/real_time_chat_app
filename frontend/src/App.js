@@ -3,7 +3,7 @@ import './App.css';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from './components/HomePage';
 import Login from './components/Login';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import io from "socket.io-client";
@@ -32,6 +32,19 @@ function App() {
   const dispatch = useDispatch();
   const socketRef = useRef(null);
 
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") || "dark"
+  );
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
   useEffect(() => {
     if (authUser) {
       socketRef.current = io(BASE_URL, {
@@ -51,7 +64,15 @@ function App() {
   }, [authUser, dispatch]);
 
   return (
-    <div className="p-4 h-screen flex items-center justify-center">
+    <div className="relative p-4 h-screen flex items-center justify-center bg-white text-black dark:bg-zinc-900 dark:text-white">
+      
+      <button
+        onClick={toggleTheme}
+        className="fixed top-4 right-4 z-50 px-4 py-2 rounded-full bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white shadow-md font-semibold"
+      >
+        {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
+      </button>
+
       <RouterProvider router={router} />
     </div>
   );
