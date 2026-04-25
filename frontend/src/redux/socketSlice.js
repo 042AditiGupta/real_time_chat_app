@@ -1,15 +1,14 @@
 import {createSlice} from "@reduxjs/toolkit";
-
-const messageSlice = createSlice({
-    name:"message",
+const socketSlice = createSlice({
+    name:"socket",
     initialState:{
-        messages:null,
+        socket:null
     },
     reducers:{
-        setMessages:(state,action)=>{
-            state.messages = action.payload;
+        setSocket:(state, action)=>{
+            state.socket = action.payload;
         }
     }
 });
-export const {setMessages} = messageSlice.actions;
-export default messageSlice.reducer;
+export const {setSocket} = socketSlice.actions;
+export default socketSlice.reducer;

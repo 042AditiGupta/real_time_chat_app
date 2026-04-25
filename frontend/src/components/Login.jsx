@@ -31,8 +31,8 @@ const Login = () => {
       );
 
       toast.success("Login Successful");
-      navigate("/");
       dispatch(setAuthUser(res.data));
+      navigate("/");
 
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
@@ -71,6 +71,7 @@ const Login = () => {
               className="w-full input input-bordered h-10 text-sm sm:text-base bg-white text-black"
               type="text"
               placeholder="Username"
+              autoComplete="username"
             />
           </div>
 
@@ -89,6 +90,7 @@ const Login = () => {
               className="w-full input input-bordered h-10 text-sm sm:text-base bg-white text-black"
               type="password"
               placeholder="Password"
+              autoComplete="current-password"
             />
           </div>
 
