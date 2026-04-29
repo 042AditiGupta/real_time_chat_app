@@ -11,6 +11,8 @@ dotenv.config({});
 
 const PORT = process.env.PORT || 8000;
 
+app.set("trust proxy", 1);
+
 // middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -21,7 +23,8 @@ const corsOption = {
     "http://localhost:3000",
     "https://real-time-frontend-app.onrender.com"
   ],
-  credentials: true
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
 };
 
 app.use(cors(corsOption));
