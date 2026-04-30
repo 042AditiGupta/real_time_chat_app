@@ -1,24 +1,26 @@
-import React, { useEffect } from 'react'
-import axios from "axios";
-import {useSelector,useDispatch} from "react-redux";
-import { setMessages } from '../redux/messageSlice';
-import { BASE_URL } from '..';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { setOtherUsers } from '../redux/userSlice';
 
-const useGetMessages = () => {
-    const {selectedUser} = useSelector(store=>store.user);
+const useGetOtherUsers = () => {
     const dispatch = useDispatch();
-    useEffect(() => {
-        const fetchMessages = async () => {
-            try {
-                //axios.defaults.withCredentials = true;
-                const res = await axios.get(`${BASE_URL}/api/v1/message/${selectedUser?._id}`);
-                dispatch(setMessages(res.data))
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchMessages();
-    }, [selectedUser?._id,setMessages]);
-}
+    const { authUser } = useSelector(store => store.user);
 
-export default useGetMessages
+    useEffect(() => {
+        const fetchOtherUsers = async () => {
+            try {
+                const res = await axios.get('/api/v1/user/other-users');
+                dispatch(setOtherUsers(res.data));
+            } catch (error) {
+                console.error("Failed to fetch users:", error);
+            }
+        };
+
+        if (authUser?._id) {
+            fetchOtherUsers();
+        }
+    }, [authUser?._id, dispatch]);
+};
+
+export default useGetOtherUsers;

@@ -5,7 +5,6 @@ import EmojiPicker from 'emoji-picker-react';
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessages } from '../redux/messageSlice';
-import { BASE_URL } from '..';
 
 const SendInput = () => {
     const [message, setMessage] = useState("");
@@ -44,14 +43,7 @@ const SendInput = () => {
         if (!message.trim()) return;
 
         try {
-            const res = await axios.post(
-                `${BASE_URL}/api/v1/message/send/${selectedUser?._id}`,
-                { message },
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                }
-            );
+            const res = await axios.post(`/api/v1/message/send/${selectedUser?._id}`, { message });
 
             dispatch(setMessages([...messages, res?.data?.newMessage]));
             setMessage("");

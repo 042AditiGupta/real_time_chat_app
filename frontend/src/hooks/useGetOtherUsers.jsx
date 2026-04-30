@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setOtherUsers } from "../redux/userSlice";
-import { BASE_URL } from "..";
 
 const useGetOtherUsers = () => {
   const dispatch = useDispatch();
@@ -13,15 +12,8 @@ const useGetOtherUsers = () => {
 
     const fetchOtherUsers = async () => {
       try {
-        const token = localStorage.getItem("token");
-
-        const res = await axios.get(`${BASE_URL}/api/v1/user`, {
-          withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
+        const res = await axios.get('/api/v1/user');
+        
         console.log("other users -> ", res.data);
         dispatch(setOtherUsers(res.data));
       } catch (error) {
@@ -31,7 +23,7 @@ const useGetOtherUsers = () => {
     };
 
     fetchOtherUsers();
-  }, [authUser, dispatch]);
+  }, [authUser?._id, dispatch]); // Fixed dependency array
 };
 
 export default useGetOtherUsers;

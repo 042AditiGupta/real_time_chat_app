@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setAuthUser, setOtherUsers, setSelectedUser } from '../redux/userSlice';
 import { setMessages } from '../redux/messageSlice';
-import { BASE_URL } from '..';
 
 const Sidebar = () => {
     const [search, setSearch] = useState("");
@@ -30,7 +29,8 @@ const Sidebar = () => {
 
     const logoutHandler = async () => {
         try {
-            const res = await axios.get(`${BASE_URL}/api/v1/user/logout`);
+            // Updated: removed BASE_URL and withCredentials (now global)
+            const res = await axios.post('/api/v1/user/logout');
             navigate("/login");
             toast.success(res.data.message);
             dispatch(setAuthUser(null));

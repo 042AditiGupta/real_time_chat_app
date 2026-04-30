@@ -1,25 +1,26 @@
-import React from 'react';
-import OtherUser from './OtherUser';
-import useGetOtherUsers from '../hooks/useGetOtherUsers';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { setOtherUsers } from '../redux/userSlice';
 
-const OtherUsers = ({ filteredUsers }) => {
-    useGetOtherUsers();
+const useGetOtherUsers = () => {
+    const dispatch = useDispatch();
+    const { authUser } = useSelector(store => store.user);
 
-    if (!filteredUsers || filteredUsers.length === 0) {
-        return (
-            <div className="text-zinc-600 dark:text-slate-300 text-center mt-8 sm:mt-10 text-sm sm:text-base opacity-70 px-2">
-                No users found
-            </div>
-        );
-    }
+    useEffect(() => {
+        const fetchOtherUsers = async () => {
+            try {
+                const res = await axios.get('/api/v1/user/other-users');
+                dispatch(setOtherUsers(res.data));
+            } catch (error) {
+                console.error("Failed to fetch users:", error);
+            }
+        };
 
-    return (
-        <div className="flex flex-col gap-1 overflow-auto">
-            {filteredUsers.map((user) => (
-                <OtherUser key={user._id} user={user} />
-            ))}
-        </div>
-    );
+        if (authUser) {
+            fetchOtherUsers();
+        }
+    }, [authUser, dispatch]);
 };
 
-export default OtherUsers;
+export default useGetOtherUsers;
