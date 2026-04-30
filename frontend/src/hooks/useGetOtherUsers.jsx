@@ -13,8 +13,13 @@ const useGetOtherUsers = () => {
 
     const fetchOtherUsers = async () => {
       try {
+        const token = localStorage.getItem("token");
+
         const res = await axios.get(`${BASE_URL}/api/v1/user`, {
           withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         console.log("other users -> ", res.data);
