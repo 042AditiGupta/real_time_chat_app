@@ -8,12 +8,16 @@ const useGetOtherUsers = () => {
   const { authUser } = useSelector((store) => store.user);
 
   useEffect(() => {
-    if (!authUser?._id) return;
+    // Only fetch if user is logged in
+    if (!authUser?._id) {
+      console.log("No user logged in, skipping fetch");
+      return;
+    }
 
     const fetchOtherUsers = async () => {
       try {
-        const res = await axios.get('/api/v1/user');
-        
+        // ✅ FIXED: Use the correct endpoint (no /other-users)
+        const res = await axios.get('/api/v1/user/');
         console.log("other users -> ", res.data);
         dispatch(setOtherUsers(res.data));
       } catch (error) {
@@ -23,7 +27,7 @@ const useGetOtherUsers = () => {
     };
 
     fetchOtherUsers();
-  }, [authUser?._id, dispatch]); // Fixed dependency array
+  }, [authUser?._id, dispatch]);
 };
 
 export default useGetOtherUsers;
