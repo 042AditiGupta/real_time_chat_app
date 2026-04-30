@@ -24,8 +24,8 @@ export const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-  const maleProfilePhoto = `https://api.dicebear.com/7.x/micah/svg?seed=${username}`;
-  const femaleProfilePhoto = `https://api.dicebear.com/7.x/notionists/svg?seed=${username}`;
+    const maleProfilePhoto = `https://api.dicebear.com/7.x/micah/svg?seed=${username}`;
+    const femaleProfilePhoto = `https://api.dicebear.com/7.x/notionists/svg?seed=${username}`;
 
     const newUser = await User.create({
       fullName,
@@ -81,13 +81,17 @@ export const login = async (req, res) => {
     });
 
     console.log("TOKEN CREATED:", token);
+    
+    
     return res
       .status(200)
       .cookie("token", token, {
-        maxAge: 1 * 24 * 60 * 60 * 1000,
         httpOnly: true,
         secure: true,
         sameSite: "none",
+        maxAge: 24 * 60 * 60 * 1000,
+        path: "/",                    // ← ADD THIS
+        domain: ".onrender.com"       // ← ADD THIS
       })
       .json({
         success: true,
@@ -104,13 +108,16 @@ export const login = async (req, res) => {
 
 export const logout = (req, res) => {
   try {
+
     return res
       .status(200)
       .cookie("token", "", {
-        maxAge: 0,
         httpOnly: true,
         secure: true,
         sameSite: "none",
+        maxAge: 0,
+        path: "/",                    // ← ADD THIS
+        domain: ".onrender.com"       // ← ADD THIS
       })
       .json({
         success: true,
