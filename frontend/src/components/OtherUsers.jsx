@@ -10,17 +10,18 @@ const useGetOtherUsers = () => {
     useEffect(() => {
         const fetchOtherUsers = async () => {
             try {
-                const res = await axios.get('/api/v1/user/other-users');
+                
+                const res = await axios.get('/api/v1/user/');
                 dispatch(setOtherUsers(res.data));
             } catch (error) {
                 console.error("Failed to fetch users:", error);
             }
         };
 
-        if (authUser) {
+        if (authUser?._id) {  
             fetchOtherUsers();
         }
-    }, [authUser, dispatch]);
+    }, [authUser?._id, dispatch]);  
 };
 
 export default useGetOtherUsers;
