@@ -3,8 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { setMessages } from "../redux/messageSlice";
 
 const useGetRealTimeMessage = () => {
-  const { socket } = useSelector((store) => store.socket);
-  const { messages } = useSelector((store) => store.message);
+  const { socket } = useSelector(
+    (store) => store.socket
+  );
+
+  const { messages } = useSelector(
+    (store) => store.message
+  );
+
   const dispatch = useDispatch();
 
   const messagesRef = useRef([]);
@@ -16,14 +22,29 @@ const useGetRealTimeMessage = () => {
   useEffect(() => {
     if (!socket) return;
 
-    const handleNewMessage = (newMessage) => {
-      dispatch(setMessages([...messagesRef.current, newMessage]));
+    const handleNewMessage = (
+      newMessage
+    ) => {
+      if (!newMessage) return;
+
+      dispatch(
+        setMessages([
+          ...messagesRef.current,
+          newMessage,
+        ])
+      );
     };
 
-    socket.on("newMessage", handleNewMessage);
+    socket.on(
+      "newMessage",
+      handleNewMessage
+    );
 
     return () => {
-      socket.off("newMessage", handleNewMessage);
+      socket.off(
+        "newMessage",
+        handleNewMessage
+      );
     };
   }, [socket, dispatch]);
 };

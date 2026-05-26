@@ -3,8 +3,6 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
-  console.log("REGISTER API HIT");
-
   try {
     const { fullName, username, password, confirmPassword, gender } = req.body;
 
@@ -38,10 +36,16 @@ export const register = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "User registered successfully",
-      user: newUser,
+      user: {
+        _id: newUser._id,
+        fullName: newUser.fullName,
+        username: newUser.username,
+        gender: newUser.gender,
+        profilePhoto: newUser.profilePhoto,
+      },
     });
   } catch (error) {
-    console.log(error);
+    console.log("Register error:", error);
     return res.status(500).json({ message: "Server error" });
   }
 };
@@ -72,17 +76,12 @@ export const login = async (req, res) => {
       });
     }
 
-    const tokenData = {
-      userId: user._id,
-    };
-    
-    const token = jwt.sign(tokenData, process.env.JWT_SECRET_KEY, {
-      expiresIn: "1d",
-    });
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "1d" }
+    );
 
-    console.log("TOKEN CREATED:", token);
-    
-    
     return res
       .status(200)
       .cookie("token", token, {
@@ -90,8 +89,7 @@ export const login = async (req, res) => {
         secure: true,
         sameSite: "none",
         maxAge: 24 * 60 * 60 * 1000,
-        path: "/",                    // ← ADD THIS
-        domain: ".onrender.com"       // ← ADD THIS
+        path: "/",
       })
       .json({
         success: true,
@@ -101,14 +99,13 @@ export const login = async (req, res) => {
         profilePhoto: user.profilePhoto,
       });
   } catch (error) {
-    console.log(error);
+    console.log("Login error:", error);
     return res.status(500).json({ message: "Server error" });
   }
 };
 
 export const logout = (req, res) => {
   try {
-
     return res
       .status(200)
       .cookie("token", "", {
@@ -116,15 +113,14 @@ export const logout = (req, res) => {
         secure: true,
         sameSite: "none",
         maxAge: 0,
-        path: "/",                    // ← ADD THIS
-        domain: ".onrender.com"       // ← ADD THIS
+        path: "/",
       })
       .json({
         success: true,
         message: "Logged out successfully.",
       });
   } catch (error) {
-    console.log(error);
+    console.log("Logout error:", error);
     return res.status(500).json({ message: "Server error" });
   }
 };
@@ -133,13 +129,13 @@ export const getOtherusers = async (req, res) => {
   try {
     const loggedInUserId = req.id;
 
-    const Otherusers = await User.find({
+    const otherUsers = await User.find({
       _id: { $ne: loggedInUserId },
     }).select("-password");
 
-    return res.status(200).json(Otherusers);
+    return res.status(200).json(otherUsers);
   } catch (error) {
-    console.log(error);
+    console.log("Get other users error:", error);
     return res.status(500).json({ message: "Server error" });
   }
 };

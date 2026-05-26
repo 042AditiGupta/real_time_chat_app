@@ -1,17 +1,14 @@
-import Signup from './components/Signup';
-import './App.css';
+import Signup from "./components/Signup";
+import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import HomePage from './components/HomePage';
-import Login from './components/Login';
-import { useEffect, useState } from 'react';
-import axios from "axios";
+import HomePage from "./components/HomePage";
+import Login from "./components/Login";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import io from "socket.io-client";
-import { setOnlineUsers } from './redux/userSlice';
-import { setSocket } from './redux/socketSlice';
-import { BASE_URL } from '.';
-
-axios.defaults.withCredentials = true;
+import { setOnlineUsers } from "./redux/userSlice";
+import { setSocket } from "./redux/socketSlice";
+import { BASE_URL } from ".";
 
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
@@ -20,7 +17,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const { authUser } = useSelector(store => store.user);
+  const { authUser } = useSelector((store) => store.user);
   const dispatch = useDispatch();
 
   const [theme, setTheme] = useState(
@@ -37,7 +34,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (!authUser) {
+    if (!authUser?._id) {
       dispatch(setSocket(null));
       return;
     }
@@ -46,6 +43,8 @@ function App() {
       query: {
         userId: authUser._id,
       },
+      transports: ["websocket"],
+      withCredentials: true,
     });
 
     dispatch(setSocket(socketio));

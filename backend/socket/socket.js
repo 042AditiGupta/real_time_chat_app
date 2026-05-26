@@ -5,20 +5,21 @@ import express from "express";
 const app = express();
 
 const server = http.createServer(app);
+
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://real-time-frontend-app.onrender.com"
+  "https://real-time-frontend-app.onrender.com",
 ];
 
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
     methods: ["GET", "POST"],
-    credentials: true
+    credentials: true,
   },
 });
 
-const userSocketMap = {}; // { userId: socketId }
+const userSocketMap = {};
 
 export const getReceiverSocketId = (receiverId) => {
   return userSocketMap[receiverId];
@@ -27,14 +28,17 @@ export const getReceiverSocketId = (receiverId) => {
 io.on("connection", (socket) => {
   const userId = socket.handshake.query.userId;
 
-  if (userId !== undefined) {
+  if (userId) {
     userSocketMap[userId] = socket.id;
   }
 
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
   socket.on("disconnect", () => {
-    delete userSocketMap[userId];
+    if (userId) {
+      delete userSocketMap[userId];
+    }
+
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
   });
 });
