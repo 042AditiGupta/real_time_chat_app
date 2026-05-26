@@ -34,8 +34,8 @@ const Sidebar = () => {
             navigate("/login");
             toast.success(res.data.message);
             dispatch(setAuthUser(null));
-            dispatch(setMessages(null));
-            dispatch(setOtherUsers(null));
+            dispatch(setMessages([]));
+            dispatch(setOtherUsers([]));
             dispatch(setSelectedUser(null));
         } catch (error) {
             console.error(error);
