@@ -29,8 +29,8 @@ const Sidebar = () => {
 
     const logoutHandler = async () => {
         try {
-            // Updated: removed BASE_URL and withCredentials (now global)
-            const res = await axios.post('/api/v1/user/logout');
+            
+            const res = await axios.get('/api/v1/user/logout');
             navigate("/login");
             toast.success(res.data.message);
             dispatch(setAuthUser(null));
