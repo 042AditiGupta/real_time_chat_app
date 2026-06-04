@@ -2,21 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ☀️ LIGHT MODE ROOT STYLES */
 body {
   margin: 0;
   min-height: 100vh;
-
-  background:
-    linear-gradient(
-      rgba(8, 15, 30, 0.38),
-      rgba(8, 15, 30, 0.38)
-    ),
-    url("https://tse2.mm.bing.net/th/id/OIP.Ry5fr17eIMkX8klI2nbw1AHaE8?pid=Api&P=0&h=180");
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  
+  /* Modern soft-slate gradient for a clean, attractive light mode background */
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  color: #0f172a;
 
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
     'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
@@ -24,6 +17,23 @@ body {
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 🌙 DARK MODE ROOT OVERRIDES */
+html.dark body {
+  /* Your custom image wallpaper only shows up here in dark mode! */
+  background:
+    linear-gradient(
+      rgba(8, 15, 30, 0.5),
+      rgba(8, 15, 30, 0.5)
+    ),
+    url("https://tse2.mm.bing.net/th/id/OIP.Ry5fr17eIMkX8klI2nbw1AHaE8?pid=Api&P=0&h=180");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #fafafa;
 }
 
 code {
@@ -31,21 +41,37 @@ code {
     monospace;
 }
 
-/* Scrollbar */
+/* ==========================================
+   🎨 THEMED SCROLLBARS
+   ========================================== */
 
 ::-webkit-scrollbar {
   width: 6px;
 }
 
+/* Light mode track & thumb default */
 ::-webkit-scrollbar-track {
-  background: rgba(255,255,255,0.12);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(17,24,39,0.85);
+  background: rgba(148, 163, 184, 0.5); /* soft slate */
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(17,24,39,1);
+  background: rgba(148, 163, 184, 0.8);
+}
+
+/* Dark mode scrollbar adjustments */
+html.dark ::webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+html.dark ::webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+html.dark ::webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }

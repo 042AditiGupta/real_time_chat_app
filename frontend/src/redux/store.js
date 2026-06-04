@@ -1,4 +1,4 @@
-import {combineReducers, configureStore} from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice.js";
 import messageReducer from "./messageSlice.js";
 import socketReducer from "./socketSlice.js";
@@ -17,7 +17,7 @@ const persistConfig = {
     key: 'root',
     version: 1,
     storage,
-    blacklist: ['socket'], // ✅ exclude socket from persistence
+    blacklist: ['socket'], // 🌟 CRUCIAL: Excludes the raw socket instance from breaking localStorage
 }
 
 const rootReducer = combineReducers({
@@ -33,8 +33,16 @@ const store = configureStore({
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: {
-                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+                // 🌟 CRUCIAL: Bypasses serializable errors for both persist and socket actions/paths
+                ignoredActions: [
+                    FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER, 
+                    'socket/setSocket'
+                ],
+                ignoredPaths: [
+                    'socket.socket'
+                ],
             },
         }),
 });
+
 export default store;

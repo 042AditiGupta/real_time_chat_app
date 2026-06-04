@@ -25,6 +25,12 @@ function App() {
   );
 
   useEffect(() => {
+    // Sync theme with both HTML classes/attributes for clean Tailwind support
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
@@ -61,10 +67,13 @@ function App() {
   }, [authUser, dispatch]);
 
   return (
-    <div className="relative p-4 h-screen flex items-center justify-center bg-white text-black dark:bg-zinc-900 dark:text-white">
+  
+    <div className="relative p-2 sm:p-4 h-screen w-screen flex items-center justify-center bg-slate-100 text-slate-900 dark:bg-zinc-950 dark:text-zinc-50 transition-all duration-300 ease-in-out">
+      
+      
       <button
         onClick={toggleTheme}
-        className="fixed top-4 right-4 z-50 px-4 py-2 rounded-full bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white shadow-md font-semibold"
+        className="fixed top-4 right-4 z-50 px-4 py-2 rounded-full bg-white text-slate-800 dark:bg-zinc-900 dark:text-zinc-100 border border-slate-200 dark:border-zinc-800 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 font-medium text-xs sm:text-sm"
       >
         {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
       </button>

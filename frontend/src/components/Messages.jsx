@@ -1,26 +1,35 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
-import { setMessages } from '../redux/messageSlice';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import useGetMessages from '../hooks/useGetMessages'; 
+import Message from './Message'; 
 
-const useGetMessages = () => {
-    const dispatch = useDispatch();
-    const { selectedUser } = useSelector(store => store.user);
+const Messages = () => {
+    useGetMessages(); 
 
-    useEffect(() => {
-        const fetchMessages = async () => {
-            try {
-                const res = await axios.get(`/api/v1/message/${selectedUser._id}`);
-                dispatch(setMessages(res.data));
-            } catch (error) {
-                console.error("Failed to fetch messages:", error);
-            }
-        };
+    const { messages } = useSelector((store) => store.message);
 
-        if (selectedUser) {
-            fetchMessages();
-        }
-    }, [selectedUser, dispatch]);
+    return (
+        // 🌟 UPDATED: Added a smooth scroll transition and padding utilities
+        <div className="px-4 py-4 flex-1 overflow-y-auto space-y-4 transition-colors duration-300">
+            {/* Loop through clean Redux array */}
+            {messages && messages.map((message) => (
+                <Message key={message?._id} message={message} />
+            ))}
+            
+            {/* 🌟 UPDATED: Refined empty chat room history state view */}
+            {(!messages || messages.length === 0) && (
+                <div className="flex flex-col items-center justify-center text-center mt-16 animate-fade-in select-none">
+                    <div className="text-3xl sm:text-4xl mb-2">👋</div>
+                    <p className="text-sm font-bold text-slate-800 dark:text-zinc-200">
+                        No messages yet
+                    </p>
+                    <p className="text-xs text-slate-400 dark:text-zinc-500 font-medium mt-0.5">
+                        Break the ice! Say hello to start the conversation.
+                    </p>
+                </div>
+            )}
+        </div>
+    );
 };
 
-export default useGetMessages;
+export default Messages;

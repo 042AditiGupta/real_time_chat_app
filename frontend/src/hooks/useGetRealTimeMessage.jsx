@@ -1,52 +1,28 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setMessages } from "../redux/messageSlice";
+import { pushMessage } from "../redux/messageSlice"; // 🌟 Imported pushMessage instead of setMessages
 
 const useGetRealTimeMessage = () => {
-  const { socket } = useSelector(
-    (store) => store.socket
-  );
-
-  const { messages } = useSelector(
-    (store) => store.message
-  );
-
+  const { socket } = useSelector((store) => store.socket);
   const dispatch = useDispatch();
-
-  const messagesRef = useRef([]);
-
-  useEffect(() => {
-    messagesRef.current = messages || [];
-  }, [messages]);
 
   useEffect(() => {
     if (!socket) return;
 
-    const handleNewMessage = (
-      newMessage
-    ) => {
+    const handleNewMessage = (newMessage) => {
       if (!newMessage) return;
 
-      dispatch(
-        setMessages([
-          ...messagesRef.current,
-          newMessage,
-        ])
-      );
+      // 🚀 Dispatch only the incoming single message.
+      // Redux Toolkit safely pushes this to the latest state, eliminating the vanishing bug!
+      dispatch(pushMessage(newMessage));
     };
 
-    socket.on(
-      "newMessage",
-      handleNewMessage
-    );
+    socket.on("newMessage", handleNewMessage);
 
     return () => {
-      socket.off(
-        "newMessage",
-        handleNewMessage
-      );
+      socket.off("newMessage", handleNewMessage);
     };
-  }, [socket, dispatch]);
+  }, [socket, dispatch]); 
 };
 
 export default useGetRealTimeMessage;
